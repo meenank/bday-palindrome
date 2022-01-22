@@ -62,6 +62,68 @@ function get_all_date_formats(date_obj_inp) {
     return [ddmmyyyy, mmddyyyy, yyyymmdd, ddmmyy, mmddyy, yymmdd]
 }
 
+function is_leap_year(test_year) {
+
+    if (test_year % 400 === 0) {
+        if (test_year % 4 === 0 && test_year % 100 != 0) {
+            return true;
+        }
+    }
+    return false;
+
+}
+
+function get_next_date(date_obj_inp_test) {
+
+    var next_day = date_obj_inp_test.day + 1;
+    var next_month = date_obj_inp_test.month;
+    var next_year = date_obj_inp_test.year;
+
+    var month_list = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; // list of no of days in 12 months for non leap year
+
+    if (next_month === 2) {
+
+        //if month = feb, check for leap or not
+        if (is_leap_year(next_year)) {
+            // is a leap year..so in leap feb if date crosses 29..move to next month
+            if (next_day > 29) {
+                day = 1;
+                month++;
+            }
+        } else {
+            //not a leap year..so if date crosses 28..move to next month
+            if (next_day > month_list[next_month - 1] /* basically 28 but wanted to use the list anyway*/ ) {
+                day = 1;
+                next_month++;
+            }
+        }
+    } else {
+        // increment for rest months, no  need of leap year check..if date exceeds current months days, move to next month..and day = 1
+        if (next_day > month_list[next_month - 1]) {
+            next_day = 1;
+            next_month++;
+        }
+    }
+
+    if (next_month > 12) {
+
+        // after incrementing date...if the month was incremented after 12..move to next year and month = 1
+        next_month = 1;
+        year++;
+    }
+
+    console.log(next_day,
+        next_month,
+        next_year)
+
+    return {
+        next_day: next_day,
+        next_month: next_month,
+        next_year: next_year
+    }
+}
+
+
 function check_palindrome(date_test_obj_inp) {
 
     var lsit_of_date_formats = get_all_date_formats(date_test_obj_inp);
@@ -79,12 +141,16 @@ function check_palindrome(date_test_obj_inp) {
 
 }
 
+
+
 var date_test = {
     day: 2,
     month: 2,
     year: 2020
-}
-
+};
+console.log("next date = ");
+get_next_date(date_test);
+console.log("end" + "\n");
 btn.addEventListener("click", () => check_palindrome(date_test));
 
 // function reverse_string(str) {
