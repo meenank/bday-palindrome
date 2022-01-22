@@ -2,6 +2,10 @@ const date_inp = document.querySelector(".date-input");
 const btn = document.querySelector("button");
 const res_para = document.querySelector(".result");
 
+const success_text = "yes";
+
+const next_text = "next"
+
 function checkWiring() {
 
     console.log(date_inp.value);
@@ -170,19 +174,45 @@ function get_next_palindrome_date(cur_inp_date) {
 }
 
 
+function click_handler(date_obj) {
+
+    var date_obj = date_inp.value;
+    // console.log(date_obj);
+
+    var date_parts = date_obj.split("-");
+    // console.log(date_parts);
+
+    var user_date_input = {
+        day: Number(date_parts[2]),
+        month: Number(date_parts[1]),
+        year: Number(date_parts[0])
+    };
+    // console.log(user_date_input)
+
+    if (check_palindrome(user_date_input)) {
+        console.log("yes")
+        res_para.innerHTML = success_text;
+
+    } else {
+        console.log("no")
+        var next_date_list = get_next_palindrome_date(user_date_input);
+        console.log("next date : " + next_date_list);
+        res_para.innerHTML = "missed by " + next_date_list[0] + " days, next date : " + next_date_list[1].day + "-" + next_date_list[1].month + "-" + next_date_list[1].year;
+    }
+}
 
 
 
-var date_test = {
-    day: 1,
-    month: 2,
-    year: 2020
-}; // test date object
+// var date_test = {
+//     day: 1,
+//     month: 2,
+//     year: 2020
+// }; // test date object
 
 // console.log("next date = ");
 // get_next_date(date_test);
 // console.log("end" + "\n");
 
-get_next_palindrome_date(date_test);
+// get_next_palindrome_date(date_test);
 
-// btn.addEventListener("click", ); // call to check palindrome on entered date after the button is clicked
+btn.addEventListener("click", click_handler); // call to check palindrome on entered date after the button is clicked
